@@ -1,59 +1,37 @@
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { useState } from 'react';
+import UserContext from "./contexts/UserContext";
 import React from 'react';
 import styled from 'styled-components';
 import LoginScreen from './component/loginscreen';
-// import UserContext from "./contexts/UserContext";
-
+import RegScreen from './component/regscreen';
+import ListScreen from './component/listscreen';
+import NewInScreen from './component/newinscreen';
+import NewOutScreen from './component/newoutscreen';
 
 export default function App() {
 
   const [stateaba, SetStateaba] = useState(false);
-
-  const weekday = [
-    {
-        dayname: 'D',
-        daynumber: 0
-    },
-    {
-        dayname: 'S',
-        daynumber: 1
-    },
-    {
-        dayname: 'T',
-        daynumber: 2
-    },
-    {
-        dayname: 'Q',
-        daynumber: 3
-    },
-    {
-        dayname: 'Q',
-        daynumber: 4
-    },
-    {
-        dayname: 'S',
-        daynumber: 5
-    },
-    {
-        dayname: 'S',
-        daynumber: 6
-    }
-    
-]
+  const num = 10;
+  const [regUsers, SetRegUsers] = useState([]);
 
   return (
-    // <UserContext.Provider value={{
-    //   stateaba,   SetStateaba,
-    //   }}>
-  <Container>
-    <BrowserRouter>
-      <Routes>
-          <Route path="/" element={<LoginScreen />}></Route>
-      </Routes>
-    </BrowserRouter>
-</Container>
-// </UserContext.Provider>
+    <UserContext.Provider value={{
+      stateaba,   SetStateaba,
+      num, regUsers, SetRegUsers
+    }}>
+      <Container>
+          <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<LoginScreen />}></Route>
+                <Route path="/registerscreen" element={<RegScreen />}></Route>
+                <Route path="/listscreen" element={<ListScreen />}></Route>
+                <Route path="/newinscreen" element={<NewInScreen />}></Route>
+                <Route path="/newoutscreen" element={<NewOutScreen />}></Route>
+            </Routes>
+          </BrowserRouter>
+      </Container>
+    </UserContext.Provider>
   );
 }
 
@@ -67,12 +45,6 @@ const Container = styled.div`
 .App-logo {
   height: 40vmin;
   pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .App-header {

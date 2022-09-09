@@ -1,16 +1,30 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import styled from "styled-components";
+import UserContext from "../contexts/UserContext";
 import React from "react";
 import "@fontsource/saira-stencil-one";
 
 
 export default function LoginScreen(){
-    const [email, SetEmail] = useState([]);
-    const [password, SetPassword] = useState([]);
+    const [email, SetEmail] = useState('');
+    const [password, SetPassword] = useState('');
     const [disbleinput, SetDisbleinput] = useState('');
     const [loading, SetLoading] = useState(false);
-
+    const { num, regUsers, SetRegUsers } = useContext(UserContext);
+    const navigate = useNavigate();
+    function LogIn(){
+    //     const testArr = regUsers;
+    //     console.log("clicou");
+    //     console.log(testArr);
+    //     if(regUsers.length === 0){
+    //         console.log("nenhum user cadastrado");
+    //     }
+    //     testArr.map(e => e.email = email? console.log('oi'): console.log("au"))
+    //     //navigate('/listscreen');
+    }
+    
     return(
     <Container> 
         <div className="logoBox"> 
@@ -25,11 +39,13 @@ export default function LoginScreen(){
                 onChange={(e) => SetPassword(e.target.value)}
                 value = {password}>
             </input>
-            <Responde onClick={''} loading = {loading}>
-                <p>Entrar</p>
-            </Responde>
+            
+                <Responde onClick={LogIn}>
+                    <p>Entrar</p>
+                </Responde>
+            
         </form> 
-            <Link to={"/cadastro"} style={{textDecoration:"none"}}><p className="linkCadastro">Primeira vez? Cadastre-se!</p></Link>     
+            <Link to={"/registerscreen"} style={{textDecoration:"none"}}><p className="linkCadastro">Primeira vez? Cadastre-se!</p></Link>     
     </Container>);
 }
 const Container = styled.div`
