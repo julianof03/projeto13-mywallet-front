@@ -1,52 +1,59 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import React from "react";
 import "@fontsource/saira-stencil-one";
 
 
-export default function LoginScreen(){
+export default function LoginScreen() {
     const [email, SetEmail] = useState('');
     const [password, SetPassword] = useState('');
-    const [disbleinput, SetDisbleinput] = useState('');
-    const [loading, SetLoading] = useState(false);
+
     const { num, regUsers, SetRegUsers } = useContext(UserContext);
     const navigate = useNavigate();
-    function LogIn(){
-    //     const testArr = regUsers;
-    //     console.log("clicou");
-    //     console.log(testArr);
-    //     if(regUsers.length === 0){
-    //         console.log("nenhum user cadastrado");
-    //     }
-    //     testArr.map(e => e.email = email? console.log('oi'): console.log("au"))
-    //     //navigate('/listscreen');
+    function LogIn(event) {
+        event.preventDefault();
+            const dados = {
+                email,
+                password,
+            };
+            const requisicao = axios.post("http://localhost:5000/", dados);
+            requisicao.then(certo);
+            requisicao.catch(errado);
     }
-    
-    return(
-    <Container> 
-        <div className="logoBox"> 
-        <p>MyWallet</p>
-        </div>
-        <form className="loginBox">
-            <input disabled={disbleinput} type="email" placeholder="email"
-                onChange={(e) => SetEmail(e.target.value)}
-                value = {email}>
-            </input>
-            <input disabled={disbleinput} type="password" placeholder="senha"
-                onChange={(e) => SetPassword(e.target.value)}
-                value = {password}>
-            </input>
-            
-                <Responde onClick={LogIn}>
+
+    function certo(){
+        navigate('/listscreen');
+    }
+    function errado(){
+        alert('algo deu errado :(');
+    }
+
+    return (
+        <Container>
+            <div className="logoBox">
+                <p>MyWallet</p>
+            </div>
+            <form className="loginBox">
+                <input type="email" placeholder="email"
+                    onChange={(e) => SetEmail(e.target.value)}
+                    value={email}>
+                </input>
+                <input type="password" placeholder="senha"
+                    onChange={(e) => SetPassword(e.target.value)}
+                    value={password}>
+                </input>
+
+                <button onClick={LogIn}>
                     <p>Entrar</p>
-                </Responde>
-            
-        </form> 
-            <Link to={"/registerscreen"} style={{textDecoration:"none"}}><p className="linkCadastro">Primeira vez? Cadastre-se!</p></Link>     
-    </Container>);
+                </button>
+
+            </form>
+            <Link to={"/registerscreen"} style={{ textDecoration: "none" }}><p className="linkCadastro">Primeira vez? Cadastre-se!</p></Link>
+        </Container>);
 }
 const Container = styled.div`
 width: 375px;
@@ -112,11 +119,12 @@ justify-content:center;
     border-style: solid;
     margin-bottom: 6px;
     p{
-        display:${({loading})=> {
-        if(loading){
-            return("none");
-            }
-            else{
-                return("flex");}
-            }}};
+        display:${({ loading }) => {
+        if (loading) {
+            return ("none");
+        }
+        else {
+            return ("flex");
+        }
+    }}};
 `;

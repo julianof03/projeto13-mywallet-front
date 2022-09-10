@@ -16,37 +16,24 @@ export default function RegScreen(){
     const { num, regUsers, SetRegUsers } = useContext(UserContext);
     const navigate = useNavigate();
 
-
-    function SubForm(event){
-        event.preventDefault();
-        console.log(regUsers);
-        if(password === spassword){
-            let newarr = {
-                name,
-                email,
-                password,
-            }  
-            SetRegUsers(newarr);
-            console.log(regUsers);
-            navigate('/');
-            return
-        }
-        
-        window.alert("Senha incopativeis");
-        SetName('');
-        SetEmail('');
-        SetPassword('');
-        SetSPassword('');
-    }
     function LogIn(event){
         event.preventDefault();
-        const dados = { 
-            name,
-            email,
-            password, };
-        const requisicao = axios.post("http://localhost:5000/register", dados);
-        requisicao.then(console.log('deucerto'));
-        requisicao.catch(console.log('deunao')); 
+        if(password === spassword){
+            const dados = { 
+                name,
+                email,
+                password, 
+            }; 
+            const requisicao = axios.post("http://localhost:5000/register", dados);
+            requisicao.then(certo);
+            requisicao.catch(errado); 
+        }
+    }
+    function certo(){
+        navigate('/');
+    }
+    function errado(){
+        alert('algo deu errado :(');
     }
     
     return(
