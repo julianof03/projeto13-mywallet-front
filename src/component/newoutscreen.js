@@ -2,33 +2,47 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import React from "react";
+import axios from "axios";
 import "@fontsource/saira-stencil-one";
 
 
 export default function NewOutScreen(){
-    const [email, SetEmail] = useState([]);
-    const [password, SetPassword] = useState([]);
-    const [disbleinput, SetDisbleinput] = useState('');
-    const [loading, SetLoading] = useState(false);
+    const [valor, SetValor] = useState([]);
+    const [text, SetText] = useState([]);
+    const navigate = useNavigate();
 
+    function AddList(event){
+        event.preventDefault();
+            const dados = { 
+                valor,
+                text, 
+            }; 
+            const requisicao = axios.post("http://localhost:5000/newoutscreen", dados);
+            requisicao.then(certo);
+            requisicao.catch(errado); 
+    }
+    function certo(){
+        navigate('/listscreen');
+    }
+    function errado(){
+        alert('algo deu errado :(');
+    }
     return(
     <Container> 
         <TopBar className="TopBar"> 
             <p>Nova Saída</p>
         </TopBar>
-            <input disabled={disbleinput} type="email" placeholder="Valor"
-                onChange={(e) => SetEmail(e.target.value)}
-                value = {email}>
+            <input type="number" placeholder="Valor"
+                onChange={(e) => SetValor(e.target.value)}
+                value = {valor}>
             </input>
-            <input disabled={disbleinput} type="password" placeholder="Descrição"
-                onChange={(e) => SetPassword(e.target.value)}
-                value = {password}>
+            <input type="text" placeholder="Descrição"
+                onChange={(e) => SetText(e.target.value)}
+                value = {text}>
             </input>
-            <Link to={"/listscreen"} style={{textDecoration:"none"}}>
-                <Responde>
+            <Responde onClick={AddList}>
                     <p>Salvar Saída</p>
                 </Responde>
-            </Link>
     </Container>);
 }
 const Container = styled.div`

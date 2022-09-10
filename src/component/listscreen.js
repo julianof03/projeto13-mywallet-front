@@ -1,123 +1,42 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import React from "react";
 import "@fontsource/saira-stencil-one";
 
 
 export default function ListScreen() {
-    const [name, SetName] = useState([]);
-    const [email, SetEmail] = useState([]);
-    const [password, SetPassword] = useState([]);
-    const [spassword, SetSPassword] = useState([]);
-    const [disbleinput, SetDisbleinput] = useState('');
-    const [loading, SetLoading] = useState(false);
-
-    const listarr = [{
+    const [list, SetList] = useState([]);
+    const listarr = {
         day: "03/03",
         text: "almoço com a mamãe",
         type: "in",
         amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "in",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },
-    {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "out",
-        amount: "2000"
-    },]
-
+    };
+    let soma = 0;
+    function refreshList(){
+        let conta = 2;
+        const requisicao = axios.get("http://localhost:5000/listscreen");
+        requisicao.then(resposta => {
+            SetList(resposta.data);
+		})
+        list.map((e)=> {
+            let num = parseFloat(e.amount)
+            console.log(num);
+            conta += num;
+            console.log(conta)});
+        soma = conta;
+    }
+    
     return (
         <Container>
             <TopBar placeholder="topbar">
-                <p>Ola, (nome aqui)</p>
-                <button></button>
+                <p>Ola, ({soma})</p>
+                <button onClick={refreshList}></button>
             </TopBar>
             <List>
-                <p className="listitem">{listarr.map((e) =>
+                <p className="listitem">{list.map((e) =>
                     <div className="singleItem">
                         <div><p className="day">{e.day}</p> <p>{e.text}</p></div>
                         <p className={e.type}>{e.amount}</p>
@@ -140,6 +59,7 @@ export default function ListScreen() {
             </Buttons>
         </Container>);
 }
+
 const Container = styled.div`
     width: 375px;
     height: 667px;
@@ -171,8 +91,9 @@ const Container = styled.div`
 const List = styled.div`
     display: flex;
     width: 326px;
-    height: 41px;
-    align-items: center;
+    min-height:440px;
+    max-height: 440px;
+    align-items: flex-end;
     justify-content: flex-start;
     flex-direction: column;
     background-color: #ffffff;
