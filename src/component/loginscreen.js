@@ -103,31 +103,24 @@ input{
     border-color: #D4D4D4;
     margin-bottom: 6px;
 }
-
+button{
+    position:relative;
+    width:305px;
+    height: 45px;
+    font-size:19px;
+    background-color:#A328D6;
+    color: #D4D4D4;
+    border-radius: 5px; 
+    border-style: none;
+    border-color: #D4D4D4;
+    p{
+        position:absolute;
+        bottom:-6px;
+        left:122px;
+        
+    }
+}
 .linkCadastro{
     color:#ffffff;
 }
-`;
-const Responde = styled.div`
-display:flex;
-align-items:center;
-justify-content:center;
-    width:309px;
-    height: 45px;
-    font-size:28px;
-    color: #ffffff;
-    background-color: #a328b6;
-    border-radius: 5px; 
-    border-width: 0px;
-    border-style: solid;
-    margin-bottom: 6px;
-    p{
-        display:${({ loading }) => {
-        if (loading) {
-            return ("none");
-        }
-        else {
-            return ("flex");
-        }
-    }}};
 `;

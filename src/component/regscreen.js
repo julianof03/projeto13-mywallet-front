@@ -106,7 +106,23 @@ input{
     border-color: #D4D4D4;
     margin-bottom: 6px;
 }
-
+button{
+    position:relative;
+    width:305px;
+    height: 45px;
+    font-size:19px;
+    background-color:#A328D6;
+    color: #D4D4D4;
+    border-radius: 5px; 
+    border-style: none;
+    border-color: #D4D4D4;
+    p{
+        position:absolute;
+        bottom:-6px;
+        left:112px;
+        
+    }
+}
 .linkCadastro{
     color:#ffffff;
 }

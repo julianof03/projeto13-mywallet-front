@@ -49,7 +49,7 @@ export default function ListScreen() {
         <Container>
             <TopBar placeholder="topbar">
                 <p>Ola, {user.name}</p>
-                <button onClick={LogOf}></button>
+                <button onClick={LogOf}><ion-icon name="log-out-outline"></ion-icon></button>
             </TopBar>
             <Wrapper>     
                 <List>
@@ -69,13 +69,13 @@ export default function ListScreen() {
             <Buttons>
                 <Link to={"/newinscreen"} style={{ textDecoration: "none" }}>
                     <div>
-                        <p>+</p>
+                        <p><ion-icon name="add-circle-outline"></ion-icon></p>
                         <p>Nova<br />entrada</p>
                     </div>
                 </Link>
                 <Link to={"/newoutscreen"} style={{ textDecoration: "none" }}>
                     <div >
-                        <p>-</p>
+                        <p><ion-icon name="remove-circle-outline"></ion-icon></p>
                         <p>Nova<br /> saída</p>
                     </div>
                 </Link>
@@ -111,6 +111,24 @@ const Container = styled.div`
     }
 `;
 
+const TopBar = styled.div`
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: bold;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    width:325px;
+    justify-content: space-between;
+    button{
+        background-color: #8c11be;
+        border-style:none;
+        font-size:25px;
+        color:white;
+        width:23px;
+        height:24px;
+    }
+`;
 const List = styled.div`
     display: flex;
     position:relative;
@@ -172,21 +190,6 @@ const List = styled.div`
     }
 `;
 
-const TopBar = styled.div`
-    color: #ffffff;
-    font-size: 26px;
-    font-weight: bold;
-    display:flex;
-    flex-direction:row;
-    align-items:center;
-    width:325px;
-    justify-content: space-between;
-    button{
-        background-color: white;
-        width:23px;
-        height:24px;
-    }
-`;
 
 const Buttons = styled.div`
     display:flex;
@@ -206,6 +209,9 @@ const Buttons = styled.div`
         width: 136px;
         height: 114px;
         padding-left:20px;
+    }
+    ion-icon{
+        font-size:25px;
     }
 `;
 const Saldo = styled.div`
