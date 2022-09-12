@@ -1,48 +1,71 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useContext } from "react";
 import styled from "styled-components";
+import UserContext from "../contexts/UserContext";
 import React from "react";
 import "@fontsource/saira-stencil-one";
 
 
 export default function ListScreen() {
     const [list, SetList] = useState([]);
-    const listarr = {
-        day: "03/03",
-        text: "almoço com a mamãe",
-        type: "in",
-        amount: "2000"
-    };
+    const [userName, SetUseName] = useState('')
+    const [numz, SetNumZ] = useState(0)
+    const {user} = useContext(UserContext);
+    const navigate = useNavigate();
     let soma = 0;
-    function refreshList(){
-        let conta = 2;
-        const requisicao = axios.get("http://localhost:5000/listscreen");
+    useEffect(() => {
+
+        const config = {headers:{Autorization:`Bearer ${user.token}`}}
+		const requisicao = axios.get("http://localhost:5000/listscreen", config);
         requisicao.then(resposta => {
+
             SetList(resposta.data);
-		})
-        list.map((e)=> {
-            let num = parseFloat(e.amount)
-            console.log(num);
-            conta += num;
-            console.log(conta)});
-        soma = conta;
+            SetUseName(resposta.data[0].User)
+
+            resposta.data.map((e)=> { 
+                let num = parseFloat(e.amount)
+                if(e.type ===  "in"){
+                    soma = soma + num;
+                }else{
+                    soma = soma - num;
+                }
+                })
+                    SetNumZ(soma/2);   
+		    }) 
+	}, []);
+
+    function LogOf(){
+        let confirm = window.confirm("deseja mesmo sair?")
+        if(confirm){
+            navigate('/') 
+        }
+        else{  
+        }   
     }
     
     return (
         <Container>
             <TopBar placeholder="topbar">
-                <p>Ola, ({soma})</p>
-                <button onClick={refreshList}></button>
+                <p>Ola, {user.name}</p>
+                <button onClick={LogOf}></button>
             </TopBar>
-            <List>
+            <Wrapper>     
+                <List>
                 <p className="listitem">{list.map((e) =>
                     <div className="singleItem">
-                        <div><p className="day">{e.day}</p> <p>{e.text}</p></div>
+                        <div><p className="day">{e.day.replace(':', '/')}</p> <p>{e.text}</p></div>
                         <p className={e.type}>{e.amount}</p>
                     </div>
                 )}</p>
             </List>
+            <SaldoBar>
+                    <p className="saldo">Saldo</p>
+                    <Saldo numz = {numz}>{numz}</Saldo>
+                </SaldoBar>
+            </Wrapper>
+            
             <Buttons>
                 <Link to={"/newinscreen"} style={{ textDecoration: "none" }}>
                     <div>
@@ -90,9 +113,10 @@ const Container = styled.div`
 
 const List = styled.div`
     display: flex;
+    position:relative;
     width: 326px;
-    min-height:440px;
-    max-height: 440px;
+    min-height:390px;
+    max-height: 390px;
     align-items: flex-end;
     justify-content: flex-start;
     flex-direction: column;
@@ -100,6 +124,7 @@ const List = styled.div`
     border-radius:5px;
     font-family: 'Raleway', sans-serif;
     overflow-y:scroll;
+    padding-bottom:50px;
     .singleItem{
         width:320px;
         height:40px;
@@ -113,7 +138,8 @@ const List = styled.div`
             width:250px;
             display:flex;
             align-items:center;
-            justify-content:space-evenly;
+            margin-left:15px;
+            justify-content:flex-start;
         }
         .day{
             color:#C6C6C6;
@@ -124,6 +150,25 @@ const List = styled.div`
         .out{
             color:#C70000;
         }
+    }
+    .status{
+        display:none;
+    }
+    .numSaldo{
+        position:absolute;
+        bottom:-6px;
+        right:16px;
+        font-family: 'Raleway', sans-serif;
+        font-weight:bold; 
+        color: ${(props) => {
+        if(parseFloat(props.numz) > 0)
+        {
+            return('red');
+           
+        }else{
+            return('#f7c52b');
+        }
+        } };
     }
 `;
 
@@ -162,4 +207,45 @@ const Buttons = styled.div`
         height: 114px;
         padding-left:20px;
     }
+`;
+const Saldo = styled.div`
+    position:absolute;
+    bottom:10px;
+    right:16px;
+    font-family: 'Raleway', sans-serif;
+    font-weight:bold; 
+    color: ${(props) => {
+    if(parseFloat(props.numz) >= 0)
+    {
+        return('#03AC00');
+           
+    }else{
+        return('#C70000');
+    }
+    } };
+`;
+const SaldoBar = styled.div`
+position:absolute;
+bottom:-41px;
+left:5px;
+height:35px;
+padding-bottom:15px;
+border-radius:5px;
+width:310px;
+background-color:white;
+.saldo{
+        position:absolute;
+        bottom:-6px;
+        left:16px;
+        font-family: 'Raleway', sans-serif;
+        font-weight:bold;
+    }
+`;
+const Wrapper = styled.div`
+margin-bottom:40px;
+background-color:blue;
+    position:relative;
+    width: 326px;
+    min-height:399px;
+    max-height: 390px;
 `;

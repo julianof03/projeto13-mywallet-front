@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import axios from "axios";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import React from "react";
@@ -11,23 +10,27 @@ import "@fontsource/saira-stencil-one";
 export default function LoginScreen() {
     const [email, SetEmail] = useState('');
     const [password, SetPassword] = useState('');
-
-    const { num, regUsers, SetRegUsers } = useContext(UserContext);
+    const {SetUser} = useContext(UserContext);
     const navigate = useNavigate();
+
     function LogIn(event) {
+
         event.preventDefault();
-            const dados = {
-                email,
+
+            const body = {
+                email: email,
                 password,
             };
-            const requisicao = axios.post("http://localhost:5000/", dados);
-            requisicao.then(certo);
+
+            const requisicao = axios.post("http://localhost:5000/", body);
+            requisicao.then((res)=> {
+                SetUser(res.data);
+                console.log(res.data);
+                navigate('/listscreen');
+            });
             requisicao.catch(errado);
     }
 
-    function certo(){
-        navigate('/listscreen');
-    }
     function errado(){
         alert('algo deu errado :(');
     }

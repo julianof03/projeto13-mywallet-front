@@ -14,11 +14,13 @@ export default function App() {
   const [stateaba, SetStateaba] = useState(false);
   const num = 10;
   const [regUsers, SetRegUsers] = useState([]);
+  const [user, SetUser] = useState([]);
 
   return (
     <UserContext.Provider value={{
       stateaba,   SetStateaba,
-      num, regUsers, SetRegUsers
+      num, regUsers, SetRegUsers,
+      user, SetUser
     }}>
       <Container>
           <BrowserRouter>

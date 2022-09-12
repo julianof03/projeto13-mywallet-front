@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
 import React from "react";
 import axios from "axios";
 import "@fontsource/saira-stencil-one";
@@ -10,14 +12,21 @@ export default function NewInScreen(){
     const [valor, SetValor] = useState([]);
     const [text, SetText] = useState([]);
     const navigate = useNavigate();
+    const {user} = useContext(UserContext);
 
     function AddList(event){
+
         event.preventDefault();
+
             const dados = { 
                 valor,
                 text, 
             }; 
-            const requisicao = axios.post("http://localhost:5000/newinscreen", dados);
+
+            const config = {headers:{Autorization:`Bearer ${user.token}`}}
+            
+            const requisicao = axios.post("http://localhost:5000/newinscreen", dados, config);
+            
             requisicao.then(certo);
             requisicao.catch(errado); 
     }
