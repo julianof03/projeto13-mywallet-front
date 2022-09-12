@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import styled from "styled-components";
@@ -9,63 +9,69 @@ import "@fontsource/saira-stencil-one";
 
 
 export default function ListScreen() {
+
     const [list, SetList] = useState([]);
-    const [userName, SetUseName] = useState('')
     const [numz, SetNumZ] = useState(0)
-    const {user} = useContext(UserContext);
+
+    const { user } = useContext(UserContext);
+
     const navigate = useNavigate();
+
     let soma = 0;
+
     useEffect(() => {
 
-        const config = {headers:{Autorization:`Bearer ${user.token}`}}
-		const requisicao = axios.get("http://localhost:5000/listscreen", config);
+        const config = { headers: { Autorization: `Bearer ${user.token}` } }
+
+        const requisicao = axios.get("http://localhost:5000/listscreen", config);
         requisicao.then(resposta => {
 
             SetList(resposta.data);
-            SetUseName(resposta.data[0].User)
-
-            resposta.data.map((e)=> { 
+            resposta.data.map((e) => {
                 let num = parseFloat(e.amount)
-                if(e.type ===  "in"){
+                if (e.type === "in") {
                     soma = soma + num;
-                }else{
+                } else {
                     soma = soma - num;
                 }
-                })
-                    SetNumZ(soma/2);   
-		    }) 
-	}, []);
+            })
+            SetNumZ((soma / 2).toFixed(2));
+        })
+    }, []);
 
-    function LogOf(){
+
+    function LogOf() {
         let confirm = window.confirm("deseja mesmo sair?")
-        if(confirm){
-            navigate('/') 
+        if (confirm) {
+            navigate('/')
         }
-        else{  
-        }   
+        else {
+        }
     }
-    
+
+
     return (
         <Container>
             <TopBar placeholder="topbar">
                 <p>Ola, {user.name}</p>
                 <button onClick={LogOf}><ion-icon name="log-out-outline"></ion-icon></button>
             </TopBar>
-            <Wrapper>     
+            
+            <Wrapper>
                 <List>
-                <p className="listitem">{list.map((e) =>
-                    <div className="singleItem">
-                        <div><p className="day">{e.day.replace(':', '/')}</p> <p>{e.text}</p></div>
-                        <p className={e.type}>{e.amount}</p>
-                    </div>
-                )}</p>
-            </List>
-            <SaldoBar>
+                    <p className="listitem">{list.map((e) =>
+                        <div className="singleItem">
+                            <div><p className="day">{e.day.replace(':', '/')}</p> <p>{e.text}</p></div>
+                            <p className={e.type}>{e.amount}</p>
+                        </div>
+                    )}</p>
+                </List>
+                <SaldoBar>
                     <p className="saldo">Saldo</p>
-                    <Saldo numz = {numz}>{numz}</Saldo>
+                    <Saldo numz={numz}>{numz}</Saldo>
                 </SaldoBar>
             </Wrapper>
-            
+
             <Buttons>
                 <Link to={"/newinscreen"} style={{ textDecoration: "none" }}>
                     <div>
@@ -80,14 +86,18 @@ export default function ListScreen() {
                     </div>
                 </Link>
             </Buttons>
-        </Container>);
+        </Container>
+    );
 }
 
 const Container = styled.div`
     width: 375px;
     height: 667px;
+
     background-color: #8c11be;
+
     border-color: #D4D4D4;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -96,14 +106,17 @@ const Container = styled.div`
     input{
         width:293px;
         height: 45px;
-        padding-left:10px;
+
         font-size:19px;
         color: #D4D4D4;
+
         border-radius: 5px; 
         border-width: 1px;
         border-style: solid;
         border-color: #D4D4D4;
+
         margin-bottom: 6px;
+        padding-left:10px;
     }
 
     .linkCadastro{
@@ -112,51 +125,68 @@ const Container = styled.div`
 `;
 
 const TopBar = styled.div`
-    color: #ffffff;
+    width:325px;
     font-size: 26px;
+
+    color: #ffffff; 
     font-weight: bold;
+
     display:flex;
     flex-direction:row;
     align-items:center;
-    width:325px;
     justify-content: space-between;
+
     button{
-        background-color: #8c11be;
-        border-style:none;
-        font-size:25px;
-        color:white;
         width:23px;
         height:24px;
+
+        font-size:25px;
+        color:white;
+
+        background-color: #8c11be;
+
+        border-style:none;   
     }
 `;
-const List = styled.div`
-    display: flex;
-    position:relative;
+
+const List = styled.div`  
+
     width: 326px;
     min-height:390px;
     max-height: 390px;
+
+    display: flex;
+    flex-direction: column;
     align-items: flex-end;
     justify-content: flex-start;
-    flex-direction: column;
-    background-color: #ffffff;
-    border-radius:5px;
-    font-family: 'Raleway', sans-serif;
     overflow-y:scroll;
+
+    background-color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+
+    border-radius:5px;
     padding-bottom:50px;
+
+    position:relative;
+
     .singleItem{
         width:320px;
         height:40px;
+
         display:flex;
         align-items:center;
         justify-content:space-between;
+
         p{
             margin-right:10px;
         }
+
         div{
             width:250px;
+            margin-left:15px;
+
             display:flex;
             align-items:center;
-            margin-left:15px;
             justify-content:flex-start;
         }
         .day{
@@ -173,85 +203,104 @@ const List = styled.div`
         display:none;
     }
     .numSaldo{
-        position:absolute;
         bottom:-6px;
         right:16px;
+
         font-family: 'Raleway', sans-serif;
         font-weight:bold; 
+
+        position:absolute;
+
         color: ${(props) => {
-        if(parseFloat(props.numz) > 0)
-        {
-            return('red');
-           
-        }else{
-            return('#f7c52b');
+        if (parseFloat(props.numz) > 0) {
+            return ('red');
+
+        } else {
+            return ('#f7c52b');
         }
-        } };
+    }};
     }
 `;
 
-
 const Buttons = styled.div`
-    display:flex;
-    margin-top:13px;
-    justify-content: space-between;
     width: 326px;
+    margin-top:13px;
+
+    display:flex;
+    justify-content: space-between;
+
     div{
-        font-family: 'Raleway', sans-serif;
+        width: 136px;
+        height: 114px;
+
+        padding-left:20px;
+
         font-weight:700;
         font-size: 17px;
+        color: #ffffff;
+        font-family: 'Raleway', sans-serif;
+
         display:flex;
         flex-direction:column;
         justify-content:center;
-        color: #ffffff;
+
         border-radius: 5px;
         background-color: #A328D6;
-        width: 136px;
-        height: 114px;
-        padding-left:20px;
+        
     }
+
     ion-icon{
         font-size:25px;
     }
 `;
+
 const Saldo = styled.div`
-    position:absolute;
     bottom:10px;
     right:16px;
+
+    position:absolute;
+    
     font-family: 'Raleway', sans-serif;
     font-weight:bold; 
     color: ${(props) => {
-    if(parseFloat(props.numz) >= 0)
-    {
-        return('#03AC00');
-           
-    }else{
-        return('#C70000');
-    }
-    } };
+        if (parseFloat(props.numz) >= 0) {
+            return ('#03AC00');
+
+        } else {
+            return ('#C70000');
+        }
+    }};
 `;
+
 const SaldoBar = styled.div`
-position:absolute;
-bottom:-41px;
-left:5px;
-height:35px;
-padding-bottom:15px;
-border-radius:5px;
-width:310px;
-background-color:white;
-.saldo{
-        position:absolute;
-        bottom:-6px;
-        left:16px;
-        font-family: 'Raleway', sans-serif;
-        font-weight:bold;
-    }
+    height:35px;
+    width:310px;
+
+    bottom:-41px;
+    left:5px;
+
+    padding-bottom:15px;
+    border-radius:5px;
+
+    background-color:white;
+    position:absolute;
+
+    .saldo{
+            bottom:-6px;
+            left:16px;
+            font-family: 'Raleway', sans-serif;
+            font-weight:bold;
+            position:absolute;
+        }
 `;
+
 const Wrapper = styled.div`
-margin-bottom:40px;
-background-color:blue;
-    position:relative;
     width: 326px;
+
     min-height:399px;
     max-height: 390px;
+
+    margin-bottom:40px;
+
+    position:relative;
 `;

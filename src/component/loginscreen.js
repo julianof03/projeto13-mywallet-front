@@ -8,27 +8,29 @@ import "@fontsource/saira-stencil-one";
 
 
 export default function LoginScreen() {
+
     const [email, SetEmail] = useState('');
     const [password, SetPassword] = useState('');
+
     const {SetUser} = useContext(UserContext);
+
     const navigate = useNavigate();
 
-    function LogIn(event) {
 
+    function LogIn(event) {
         event.preventDefault();
 
-            const body = {
-                email: email,
-                password,
-            };
+        const body = {
+            email: email,
+            password,
+        };
 
-            const requisicao = axios.post("http://localhost:5000/", body);
-            requisicao.then((res)=> {
-                SetUser(res.data);
-                console.log(res.data);
-                navigate('/listscreen');
-            });
-            requisicao.catch(errado);
+        const requisicao = axios.post("http://localhost:5000/", body);
+        requisicao.then((res)=> {
+            SetUser(res.data);
+            navigate('/listscreen');
+        });
+        requisicao.catch(errado);
     }
 
     function errado(){
@@ -40,7 +42,9 @@ export default function LoginScreen() {
             <div className="logoBox">
                 <p>MyWallet</p>
             </div>
+
             <form className="loginBox">
+
                 <input type="email" placeholder="email"
                     onChange={(e) => SetEmail(e.target.value)}
                     value={email}>
@@ -55,72 +59,94 @@ export default function LoginScreen() {
                 </button>
 
             </form>
+
             <Link to={"/registerscreen"} style={{ textDecoration: "none" }}><p className="linkCadastro">Primeira vez? Cadastre-se!</p></Link>
+        
         </Container>);
 }
 const Container = styled.div`
-width: 375px;
-height: 597px;
-background-color: #8c11be;
-border-color: #D4D4D4;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: flex-start;
-padding-top:60px;
-img{
-    width: 180px;
-    height:180px;
-}
-.loginBox{
-    margin-bottom: 40px;
+    width: 375px;
+    height: 597px;
+
+    padding-top:60px;
+
+    background-color: #8c11be;
+
+    border-color: #D4D4D4;
+
     display: flex;
     flex-direction: column;
-    align-items:center;
-}
-.logoBox{
-    margin-top: 70px;
-    margin-bottom:40px;
-    width: 147px;
-    height: 50px;
-    font-size: 32px;
-    font-family: "Saira Stencil One";
-    color: white;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-}
-input{
-    width:293px;
-    height: 45px;
-    padding-left:10px;
-    font-size:19px;
-    color: #D4D4D4;
-    border-radius: 5px; 
-    border-width: 1px;
-    border-style: solid;
-    border-color: #D4D4D4;
-    margin-bottom: 6px;
-}
-button{
-    position:relative;
-    width:305px;
-    height: 45px;
-    font-size:19px;
-    background-color:#A328D6;
-    color: #D4D4D4;
-    border-radius: 5px; 
-    border-style: none;
-    border-color: #D4D4D4;
-    p{
-        position:absolute;
-        bottom:-6px;
-        left:122px;
-        
+    align-items: center;
+    justify-content: flex-start;
+
+    img{
+        width: 180px;
+        height:180px;
     }
-}
-.linkCadastro{
-    color:#ffffff;
-}
+
+    .loginBox{
+        margin-bottom: 40px;
+
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+    }
+
+    .logoBox{
+        width: 147px;
+        height: 50px;
+
+        font-size: 32px;
+        margin-top: 70px;
+        margin-bottom:40px;
+
+        color: white;
+        font-family: "Saira Stencil One";
+
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+    }
+
+    input{
+        width:293px;
+        height: 45px;
+
+        padding-left:10px;
+
+        font-size:19px;
+        color: #D4D4D4;
+
+        border-radius: 5px; 
+        border-width: 1px;
+        border-style: solid;
+        border-color: #D4D4D4;
+
+        margin-bottom: 6px;
+    }
+    button{
+        width:305px;
+        height: 45px;
+
+        background-color:#A328D6;
+
+        font-size:19px;
+        color: #D4D4D4;
+
+        border-radius: 5px; 
+        border-style: none;
+        border-color: #D4D4D4;
+
+        position:relative;
+        p{
+            position:absolute;
+            bottom:-6px;
+            left:122px;   
+        }
+    }
+    
+    .linkCadastro{
+        color:#ffffff;
+    }
 `;
